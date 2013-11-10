@@ -112,7 +112,7 @@ for (i = 0; i < els.length; i++) {
 
 ### Declarations
 - Variables MUST be declared with a `var`.
-- Variables SHOULD be declared as near to their use as possible. Keep in mind that variables get hoisted to the top of the current scope
+- Variables SHOULD be declared as near to their use as possible. Keep in mind that variables get added to the scope of the function where they were declared.
 - Variables MUST be declared exactly once per scope.
 - Constants MUST be declared with a `var` keyword. Do not use `const`.
 - Regular expressions SHOULD use the literal form wherever possible: `/foobar/g`. Use the RegExp constructor only when you need a dynamic match: `new RegExp('foo' + name + 'bar', 'g')`
