@@ -85,20 +85,20 @@ Give reference names meaning; don't abbreviate to the point where it isn't clear
 ```javascript
 // Good.
 function query(selector) {
-  return document.querySelector(selector);
+  return document.querySelectorAll(selector);
 }
 
 var i,
   elements = [],
-  matches = query('#foo');
+  foos = query('#foo');
 
-for (i = 0; i < matches.length; i++) {
-  elements.push(matches[i]);
+for (i = 0; i < foos.length; i++) {
+  elements.push(foos[i]);
 }
 
 // Bad.
 function q(s) {
-  return document.querySelector(s);
+  return document.querySelectorAll(s);
 }
 
 var i,
