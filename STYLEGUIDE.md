@@ -152,7 +152,7 @@ Except in the case of *null or undefined* above, ALWAYS use strict equality when
 
 #### Coerced Types
 
-Where a value may not be the format you expect, use unary `+` operators to convert the value.
+Where a value might not be the format you expect, use explicit typing:
 
 ```javascript
 var number = 1,
@@ -162,28 +162,22 @@ var number = 1,
 number;
 // 1
 
-number + '';
+String(number);
 // '1'
 
 string;
 // '1'
 
-+string
+Number(string)
 // 1
-
-string + 1;
-// '11'
-
-+string + 1;
-// 2
 
 bool;
 // false
 
-+bool;
+Number(bool);
 // 0
 
-bool + '';
+String(bool);
 // "false"
 ```
 
