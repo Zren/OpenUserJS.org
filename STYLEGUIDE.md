@@ -116,18 +116,18 @@ for (i = 0; i < els.length; i++) {
 - Variables MUST be declared exactly once per scope.
 - Constants MUST be declared with a `var` keyword. Do not use `const`.
 - Regular expressions SHOULD use the literal form wherever possible: `/foobar/g`. Use the RegExp constructor only when you need a dynamic match: `new RegExp('foo' + name + 'bar', 'g')`
-- Variables and constants should be declared using a single `var`:
+- Variables and constants MUST be declared with one `var` keyword per statement:
 
 ```javascript
 // Good.
-var foo = '',
-  bar = '',
-  QUUX;
-
-// Bad.
 var foo = '';
 var bar = '';
 var QUUX;
+
+// Bad.
+var foo = '',
+  bar = '',
+  QUUX;
 ```
 
 ### Type Checking
