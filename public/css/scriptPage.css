@@ -9,3 +9,7 @@
 .btn-vote:not(:hover):not(.active) {
   color: #aea79f;
 }
+.path-divider {
+  margin: 0 .25em;
+  color: #666;
+}
