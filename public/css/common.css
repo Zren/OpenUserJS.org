@@ -259,11 +259,15 @@ h6:hover a.anchor {
   overflow-x: auto;
 }
 
-th > a {
+.table th > a {
   color: initial;
   display: block;
 }
 
 .inline-block {
   display: inline-block;
+}
+
+.panel-default > a.panel-heading {
+  display: block;
 }
