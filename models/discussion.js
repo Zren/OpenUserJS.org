@@ -1,32 +1,31 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.Types.ObjectId;
 
-var discussionSchema = new Schema({
-  // Visible
+var DiscussionSchema = new Schema({
+  //--- Data
   topic: String,
   category: String,
-  comments: Number,
+  comments: {type: Number, default: 0},
   author: String,
-  created: Date,
+  _authorId: {type: ObjectId, reg: 'User'},
+  created: {type: Date, default: Date.now},
+  updated: {type: Date, default: Date.now},
+
+  //--- Generated
   lastCommentor: String,
-  updated: Date,
-  rating: Number, // collective rating from comments
+  // _lastCommentorId: {type: ObjectId, reg: 'User'},
+  path: String,
+  duplicateId: Number,
+  rating: Number, // collectiveRating([Comment, ...])
+  flagged: Boolean, // true if creator comment is flagged past discussion threshold
 
-  // Moderation
-  // true if creator comment is flagged past discussion threshold
-  flagged: Boolean,
-
-  // Issue field (yeah that's right, issues are just special discussions)
+  //--- Issue fields
+  // (yeah that's right, issues are just special discussions)
   issue: Boolean,
   open: Boolean,
   labels: [String],
-
-  // Extra info
-  path: String,
-  duplicateId: Number,
-  _authorId: Schema.Types.ObjectId
 });
 
-var Discussion = mongoose.model('Discussion', discussionSchema);
-
-exports.Discussion = Discussion;
+var DiscussionModel = mongoose.model('Discussion', DiscussionSchema);
+exports.Discussion = DiscussionModel;

@@ -1,24 +1,22 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.Types.ObjectId;
 
-var commentSchema = new Schema({
-  // Visible
-  content: String,
+var CommentSchema = new Schema({
+  //--- Data
+  _discussionId: {type: ObjectId, reg: 'Discussion'},
   author: String,
-  created: Date,
+  _authorId: {type: ObjectId, reg: 'User'},
+  content: String,
+  created: {type: Date, default: Date.now},
+  // updated: {type: Date, default: Date.now},
+  creator: Boolean, // Is the first comment in a discussion.
+
+  //--- Generated
   rating: Number,
-
-  // Moderation
-  creator: Boolean,
-  flags: Number,
-  flagged: Boolean,
-
-  // Extra info
   id: String, // Base16 of created.getTime()
-  _discussionId: Schema.Types.ObjectId,
-  _authorId: Schema.Types.ObjectId
 });
+CommentSchema.plugin(require('./mixins/moderated'));
 
-var Comment = mongoose.model('Comment', commentSchema);
-
-exports.Comment = Comment;
+var CommentModel = mongoose.model('Comment', CommentSchema);
+exports.Comment = CommentModel;

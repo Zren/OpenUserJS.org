@@ -1,12 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.Types.ObjectId;
 
-var voteSchema = new Schema({
-  vote: Boolean,
-  _scriptId: Schema.Types.ObjectId,
-  _userId: Schema.Types.ObjectId
+var ScriptVoteSchema = new Schema({
+  vote: Boolean, // Upvote = true, Downvote = false
+  _scriptId: {type: ObjectId, ref: 'Script'},
+  _userId: {type: ObjectId, ref: 'User'}
 });
 
-var Vote = mongoose.model('Vote', voteSchema);
-
-exports.Vote = Vote;
+var ScriptVoteModel = mongoose.model('Vote', ScriptVoteSchema);
+exports.Vote = ScriptVoteModel;

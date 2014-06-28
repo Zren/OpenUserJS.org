@@ -1,16 +1,16 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.Types.ObjectId;
 
-var removeSchema = new Schema({
+var RemovedItemSchema = new Schema({
   model: String,
   content: Schema.Types.Mixed,
-  removed: Date,
+  removed: {type: Date, default: Date.now},
   reason: String,
   removerName: String,
   removerRole: Number,
-  _removerId: Schema.Types.ObjectId
+  _removerId: {type: ObjectId, reg: 'User'}
 });
 
-var Remove = mongoose.model('Remove', removeSchema);
-
-exports.Remove = Remove;
+var RemovedItemModel = mongoose.model('Remove', RemovedItemSchema);
+exports.Remove = RemovedItemModel;

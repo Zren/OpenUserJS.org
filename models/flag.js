@@ -1,12 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.Types.ObjectId;
 
-var flagSchema = new Schema({
+var FlagSchema = new Schema({
   model: String,
-  _contentId: Schema.Types.ObjectId,
-  _userId: Schema.Types.ObjectId
+  _contentId: ObjectId,
+  _userId: {type: ObjectId, reg: 'User'}
 });
 
-var Flag = mongoose.model('Flag', flagSchema);
-
-exports.Flag = Flag;
+var FlagModel = mongoose.model('Flag', FlagSchema);
+exports.Flag = FlagModel;

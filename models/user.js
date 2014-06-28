@@ -1,26 +1,24 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.Types.ObjectId;
 
-var userSchema = new Schema({
-  // Visible
+var UserSchema = new Schema({
+  //--- Data
   name: String,
+  role: Number,
   about: String,
 
+  //--- Generated
+  ghUsername: String, // Store their GitHub username when they import scripts
+  sessionIds: [String],
+
+  //--- AuthStrategy Data
   // A user can link multiple accounts to their OpenUserJS account
   auths: Array,
   strategies: Array,
-
-  // Store their GitHub username when they import scripts
-  ghUsername: String,
-
-  // Moderation
-  role: Number,
-  flags: Number,
-  flagged: Boolean,
-  sessionIds: [String]
 });
+UserSchema.plugin(require('./mixins/moderated'));
 
-var User = mongoose.model('User', userSchema);
-
-exports.User = User;
+var UserModel = mongoose.model('User', UserSchema);
+exports.User = UserModel;
 

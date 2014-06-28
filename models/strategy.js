@@ -1,13 +1,12 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var strategySchema = new Schema({
+var AuthStrategySchema = new Schema({
   id: String,
   key: String,
   name: String,
   display: String
 });
 
-var Strategy = mongoose.model('Strategy', strategySchema);
-
-exports.Strategy = Strategy;
+var AuthStrategyModel = mongoose.model('Strategy', AuthStrategySchema);
+exports.Strategy = AuthStrategyModel;

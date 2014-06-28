@@ -1,13 +1,19 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var ObjectId = Schema.Types.ObjectId;
 
-var groupSchema = new Schema({
+var ScriptGroupSchema = new Schema({
+  //--- Data
   name: String,
-  rating: Number,
-  updated: Date,
-  _scriptIds: [Schema.Types.ObjectId]
+  // created: {type: Date, default: Date.now},
+  updated: {type: Date, default: Date.now},
+  _scriptIds: [{type: ObjectId, reg: 'Script'}],
+
+  //--- Generated
+  // scriptCount: {type: Number, default: 0},
+  rating: {type: Number, default: 0}, // collectiveRating([Script, ...])
 });
+ScriptGroupSchema.plugin(require('./mixins/moderated'));
 
-var Group = mongoose.model('Group', groupSchema);
-
-exports.Group = Group;
+var ScriptGroupModel = mongoose.model('Group', ScriptGroupSchema);
+exports.Group = ScriptGroupModel;
