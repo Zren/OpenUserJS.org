@@ -1,4 +1,5 @@
 var AWS = require('aws-sdk');
+var async = require('async');
 
 var Script = require('../models/script').Script;
 var User = require('../models/user').User;
@@ -229,10 +230,10 @@ exports.storeScript = function (user, meta, buf, callback, update) {
   var libraries = [];
   var requires = null;
   var collaborators = null;
-  var libraryRegex = new RegExp('^https?:\/\/' +
-    (process.env.NODE_ENV === 'production' ?
-      'openuserjs\.org' : 'localhost:8080') +
-    '\/libs\/src\/(.+?\/.+?\.js)$', '');
+  var siteHostnameRegex = 'localhost:8080';
+  if (process.env.NODE_ENV === 'production')
+    siteHostnameRegex = 'openuserjs\.org';
+  var libraryRegex = new RegExp('^https?:\/\/' + siteHostnameRegex +'\/libs\/src\/(.+?\/.+?\.js)$', '');
 
   if (!meta) { return callback(null); }
 
@@ -311,21 +312,63 @@ exports.storeScript = function (user, meta, buf, callback, update) {
         script.updated = new Date();
       }
 
-      script.save(function (err, script) {
-        s3.putObject({ Bucket: bucketName, Key: installName, Body: buf },
-          function (err, data) {
-            if (user.role === userRoles.length - 1) {
-              var userDoc = user;
-              if (!userDoc.save) {
-                // We're probably using req.session.user which may have gotten serialized.
-                userDoc = new User(userDoc);
-              }
-              --userDoc.role;
-              userDoc.save(function (err, user) { callback(script); });
+      var savedScript = null;
+      async.waterfall([
+        // Store Script in AWS
+        function(cb) {
+          s3.putObject({
+            Bucket: bucketName,
+            Key: installName,
+            Body: buf
+          }, function(err, data) {
+            var continueOnAwsError = true;
+            if (process.env.NODE_ENV === 'production')
+              continueOnAwsError = false;
+
+            if (err && continueOnAwsError) {
+              // Dev Environments may not have setup AWS yet.
+              console.warn('AWS Error. Please setup fakes3.');
+              console.error(err);
+              console.warn('Continuing since we\'re in a dev env.');
+              cb(null);
             } else {
-              callback(script);
+              console.log('storeScript: AWS.put: ' + installName);
+              cb(err);
             }
           });
+        },
+
+        // Save Script
+        function(cb) {
+          script.save(function(err, script){
+            savedScript = script;
+            console.log('storeScript: Script.save: ' + installName);
+            cb(err);
+          });
+        },
+
+        // Update user role
+        function(cb) {
+          // If user role is not "Script Author" or above.
+          if (user.role === userRoles.length - 1) {
+            var userDoc = user;
+            if (!userDoc.save) {
+              // We're probably using req.session.user which may have gotten serialized.
+              userDoc = new User(userDoc);
+            }
+            --userDoc.role;
+            userDoc.save(function(err, user){
+              cb(err);
+            });
+          } else {
+            cb(null);
+          }
+        },
+      ], function(err) {
+        if (err)
+          console.error(err);
+
+        callback(savedScript);
       });
     });
 };
