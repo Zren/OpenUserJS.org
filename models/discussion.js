@@ -8,13 +8,13 @@ var DiscussionSchema = new Schema({
   category: String,
   comments: {type: Number, default: 0},
   author: String,
-  _authorId: {type: ObjectId, reg: 'User'},
+  _authorId: {type: ObjectId, ref: 'User'},
   created: {type: Date, default: Date.now},
   updated: {type: Date, default: Date.now},
 
   //--- Generated
   lastCommentor: String,
-  // _lastCommentorId: {type: ObjectId, reg: 'User'},
+  // _lastCommentorId: {type: ObjectId, ref: 'User'},
   path: String,
   duplicateId: Number,
   rating: Number, // collectiveRating([Comment, ...])

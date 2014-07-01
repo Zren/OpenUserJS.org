@@ -4,9 +4,9 @@ var ObjectId = Schema.Types.ObjectId;
 
 var CommentSchema = new Schema({
   //--- Data
-  _discussionId: {type: ObjectId, reg: 'Discussion'},
+  _discussionId: {type: ObjectId, ref: 'Discussion'},
   author: String,
-  _authorId: {type: ObjectId, reg: 'User'},
+  _authorId: {type: ObjectId, ref: 'User'},
   content: String,
   created: {type: Date, default: Date.now},
   // updated: {type: Date, default: Date.now},

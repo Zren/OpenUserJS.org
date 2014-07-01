@@ -9,7 +9,7 @@ var RemovedItemSchema = new Schema({
   reason: String,
   removerName: String,
   removerRole: Number,
-  _removerId: {type: ObjectId, reg: 'User'}
+  _removerId: {type: ObjectId, ref: 'User'}
 });
 
 var RemovedItemModel = mongoose.model('Remove', RemovedItemSchema);

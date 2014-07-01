@@ -13,7 +13,7 @@ var ScriptGroupSchema = new Schema({
   name: {type: String, set: cleanGroupName},
   // created: {type: Date, default: Date.now},
   updated: {type: Date, default: Date.now},
-  _scriptIds: [{type: ObjectId, reg: 'Script'}],
+  _scriptIds: [{type: ObjectId, ref: 'Script'}],
 
   //--- Generated
   // scriptCount: {type: Number, default: 0},

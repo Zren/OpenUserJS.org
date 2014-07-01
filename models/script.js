@@ -18,9 +18,9 @@ var ScriptSchema = new Schema({
   // created: {type: Date, default: Date.now},
   updated: {type: Date, default: Date.now},
   uses: [String],
-  // libraries: [{type: ObjectId, reg: 'Script'}],
+  // libraries: [{type: ObjectId, ref: 'Script'}],
   fork: Array, // [{ "url": "Author/ScriptName", "author": "Author" }, ...]
-  // forkParent: {type: ObjectId, reg: 'Script'},
+  // forkParent: {type: ObjectId, ref: 'Script'},
   isLib: Boolean,
   meta: Object,
 
