@@ -102,7 +102,7 @@ exports.addScriptToGroups = function (script, groupNames, callback) {
         });
 
         group.save(function (err, group) {
-          script._groupId = group._id;
+          //script._groupId = group._id;
           cb();
         });
       });

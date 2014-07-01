@@ -101,92 +101,93 @@ var getScriptInstallPageUrl = function (script) {
 //
 var parseScript = function (scriptData) {
   if (!scriptData) return;
-  var script = scriptData.toObject ? scriptData.toObject() : scriptData;
+  // var script = scriptData.toObject ? scriptData.toObject() : scriptData;
+  var script = scriptData;
 
-  // Temporaries
-  var htmlStub = null;
+  // // Temporaries
+  // var htmlStub = null;
 
-  // Author
-  if (_.isString(script.author)) {
-    script.author = parseUser({ name: script.author });
-  }
+  // // Author
+  // if (_.isString(script.author)) {
+  //   script.author = parseUser({ name: script.author });
+  // }
 
-  // Icons
-  if (script.meta.icon) {
-    if (_.isString(script.meta.icon)) {
-      script.icon16Url = script.meta.icon;
-      script.icon45Url = script.meta.icon;
-    } else if (_.isArray(script.meta.icon) && !_.isEmpty(script.meta.icon)) {
-      script.icon16Url = script.meta.icon[script.meta.icon.length - 1];
-      script.icon45Url = script.meta.icon[script.meta.icon.length - 1];
-    }
-  }
-  if (script.meta.icon64) {
-    script.icon45Url = script.meta.icon64;
-  }
+  // // Icons
+  // if (script.meta.icon) {
+  //   if (_.isString(script.meta.icon)) {
+  //     script.icon16Url = script.meta.icon;
+  //     script.icon45Url = script.meta.icon;
+  //   } else if (_.isArray(script.meta.icon) && !_.isEmpty(script.meta.icon)) {
+  //     script.icon16Url = script.meta.icon[script.meta.icon.length - 1];
+  //     script.icon45Url = script.meta.icon[script.meta.icon.length - 1];
+  //   }
+  // }
+  // if (script.meta.icon64) {
+  //   script.icon45Url = script.meta.icon64;
+  // }
 
-  // Support Url
-  if (script.meta.supportURL) {
-    if (_.isString(script.meta.supportURL)) {
-      htmlStub = '<a href="' + script.meta.supportURL + '"></a>';
-      if (htmlStub === sanitizeHtml(htmlStub, htmlWhitelistLink)) {
-        script.support = [{
-          url: script.meta.supportURL,
-          text: decodeURI(script.meta.supportURL),
-          hasNoFollow: !/^(?:https?:\/\/)?openuserjs\.org/i.test(script.meta.supportURL)
-        }];
-      }
-    } else if (_.isArray(script.meta.supportURL) && !_.isEmpty(script.meta.supportURL)) {
-      htmlStub = '<a href="' + script.meta.supportURL[script.meta.supportURL.length - 1] + '"></a>';
-      if (htmlStub === sanitizeHtml(htmlStub, htmlWhitelistLink)) {
-        script.support = [{
-          url:  script.meta.supportURL[script.meta.supportURL.length - 1],
-          text: decodeURI(script.meta.supportURL[script.meta.supportURL.length - 1]),
-          hasNoFollow:  !/^(?:https?:\/\/)?openuserjs\.org/i.test(script.meta.supportURL[script.meta.supportURL.length - 1])
-        }];
-      }
-    }
-  }
+  // // Support Url
+  // if (script.meta.supportURL) {
+  //   if (_.isString(script.meta.supportURL)) {
+  //     htmlStub = '<a href="' + script.meta.supportURL + '"></a>';
+  //     if (htmlStub === sanitizeHtml(htmlStub, htmlWhitelistLink)) {
+  //       script.support = [{
+  //         url: script.meta.supportURL,
+  //         text: decodeURI(script.meta.supportURL),
+  //         hasNoFollow: !/^(?:https?:\/\/)?openuserjs\.org/i.test(script.meta.supportURL)
+  //       }];
+  //     }
+  //   } else if (_.isArray(script.meta.supportURL) && !_.isEmpty(script.meta.supportURL)) {
+  //     htmlStub = '<a href="' + script.meta.supportURL[script.meta.supportURL.length - 1] + '"></a>';
+  //     if (htmlStub === sanitizeHtml(htmlStub, htmlWhitelistLink)) {
+  //       script.support = [{
+  //         url:  script.meta.supportURL[script.meta.supportURL.length - 1],
+  //         text: decodeURI(script.meta.supportURL[script.meta.supportURL.length - 1]),
+  //         hasNoFollow:  !/^(?:https?:\/\/)?openuserjs\.org/i.test(script.meta.supportURL[script.meta.supportURL.length - 1])
+  //       }];
+  //     }
+  //   }
+  // }
 
-  //
-  script.fullName = script.author.name + '/' + script.name; // GitHub-like name
+  // //
+  // script.fullName = script.author.name + '/' + script.name; // GitHub-like name
 
-  // Script Good/Bad bar.
-  // script.votes = count(upvotes) + count(downvotes)
-  // script.flags = flags - count(upvotes)
-  var sumVotesAndFlags = script.votes + script.flags;
-  var votesRatio = sumVotesAndFlags > 0 ? script.votes / sumVotesAndFlags : 0;
-  var flagsRatio = sumVotesAndFlags > 0 ? script.flags / sumVotesAndFlags : 0;
-  script.votesPercent = votesRatio * 100;
-  script.flagsPercent = flagsRatio * 100;
+  // // Script Good/Bad bar.
+  // // script.votes = count(upvotes) + count(downvotes)
+  // // script.flags = flags - count(upvotes)
+  // var sumVotesAndFlags = script.votes + script.flags;
+  // var votesRatio = sumVotesAndFlags > 0 ? script.votes / sumVotesAndFlags : 0;
+  // var flagsRatio = sumVotesAndFlags > 0 ? script.flags / sumVotesAndFlags : 0;
+  // script.votesPercent = votesRatio * 100;
+  // script.flagsPercent = flagsRatio * 100;
 
-  // Urls: Slugs
-  script.authorSlug = script.author.name;
-  script.nameSlug = cleanFilename(script.name);
-  script.installNameSlug = script.author.slug + '/' + script.nameSlug;
+  // // Urls: Slugs
+  // script.authorSlug = script.author.name;
+  // script.nameSlug = cleanFilename(script.name);
+  // script.installNameSlug = script.author.slug + '/' + script.nameSlug;
 
-  // Urls: Public
-  script.scriptPageUrl = getScriptPageUrl(script);
-  script.scriptInstallPageUrl = getScriptInstallPageUrl(script);
-  script.scriptViewSourcePageUrl = getScriptViewSourcePageUrl(script);
+  // // Urls: Public
+  // script.scriptPageUrl = getScriptPageUrl(script);
+  // script.scriptInstallPageUrl = getScriptInstallPageUrl(script);
+  // script.scriptViewSourcePageUrl = getScriptViewSourcePageUrl(script);
 
-  // Urls: Issues
-  var slug = (script.isLib ? 'libs' : 'scripts');
-  slug += '/' + script.author.slug;
-  slug += '/' + script.nameSlug;
-  script.issuesCategorySlug = slug + '/issues';
-  script.scriptIssuesPageUrl = '/' + script.issuesCategorySlug;
-  script.scriptOpenIssuePageUrl = '/' + slug + '/issue/new';
+  // // Urls: Issues
+  // var slug = (script.isLib ? 'libs' : 'scripts');
+  // slug += '/' + script.author.slug;
+  // slug += '/' + script.nameSlug;
+  // script.issuesCategorySlug = slug + '/issues';
+  // script.scriptIssuesPageUrl = '/' + script.issuesCategorySlug;
+  // script.scriptOpenIssuePageUrl = '/' + slug + '/issue/new';
 
-  // Urls: Author
-  script.scriptEditMetadataPageUrl = getScriptEditAboutPageUrl(script);
-  script.scriptEditSourcePageUrl = getScriptEditSourcePageUrl(script);
+  // // Urls: Author
+  // script.scriptEditMetadataPageUrl = getScriptEditAboutPageUrl(script);
+  // script.scriptEditSourcePageUrl = getScriptEditSourcePageUrl(script);
 
-  // Urls: Moderation
-  script.scriptRemovePageUrl = '/remove' + (script.isLib ? '/libs/' : '/scripts/') + script.installNameSlug;
+  // // Urls: Moderation
+  // script.scriptRemovePageUrl = '/remove' + (script.isLib ? '/libs/' : '/scripts/') + script.installNameSlug;
 
-  // Dates
-  parseDateProperty(script, 'updated');
+  // // Dates
+  // parseDateProperty(script, 'updated');
 
   return script;
 };
@@ -195,7 +196,7 @@ exports.parseScript = parseScript;
 
 exports.renderScript = function (script) {
   if (!script) return;
-  script.aboutRendered = renderMd(script.about);
+  // script.aboutRendered = renderMd(script.about);
 };
 
 /**
@@ -208,35 +209,35 @@ var parseUser = function (userData) {
   // var user = userData.toObject ? userData.toObject() : userData;
   var user = userData;
 
-  // Role
-  user.isMod = user.role < 4;
-  user.isAdmin = user.role < 3;
-  user.roleName = userRoles[user.role];
+  // // Role
+  // user.isMod = user.role < 4;
+  // user.isAdmin = user.role < 3;
+  // user.roleName = userRoles[user.role];
 
-  //
-  user.slug = user.name;
+  // //
+  // user.slug = user.name;
 
-  // Urls: Public
-  user.userPageUrl = '/users/' + user.name;
-  user.userCommentListPageUrl = user.userPageUrl + '/comments';
-  user.userScriptListPageUrl = user.userPageUrl + '/scripts';
-  user.userManageGitHubPageUrl = user.userPageUrl + '/github';
-  user.userGitHubRepoListPageUrl = user.userPageUrl + '/github/repos';
-  user.userGitHubRepoPageUrl = user.userPageUrl + '/github/repo';
-  user.userGitHubImportPageUrl = user.userPageUrl + '/github/import';
-  user.userEditProfilePageUrl = user.userPageUrl + '/profile/edit';
-  user.userUpdatePageUrl = user.userPageUrl + '/update';
-  user.userRemovePageUrl = '/remove/users/' + user.name;
+  // // Urls: Public
+  // user.userPageUrl = '/users/' + user.name;
+  // user.userCommentListPageUrl = user.userPageUrl + '/comments';
+  // user.userScriptListPageUrl = user.userPageUrl + '/scripts';
+  // user.userManageGitHubPageUrl = user.userPageUrl + '/github';
+  // user.userGitHubRepoListPageUrl = user.userPageUrl + '/github/repos';
+  // user.userGitHubRepoPageUrl = user.userPageUrl + '/github/repo';
+  // user.userGitHubImportPageUrl = user.userPageUrl + '/github/import';
+  // user.userEditProfilePageUrl = user.userPageUrl + '/profile/edit';
+  // user.userUpdatePageUrl = user.userPageUrl + '/update';
+  // user.userRemovePageUrl = '/remove/users/' + user.name;
 
-  // Funcs
-  user.githubUserId = function () {
-    var indexOfGH = user.strategies.indexOf('github');
-    if (indexOfGH > -1) {
-      return user.auths[indexOfGH];
-    } else {
-      return null;
-    }
-  };
+  // // Funcs
+  // user.githubUserId = function () {
+  //   var indexOfGH = user.strategies.indexOf('github');
+  //   if (indexOfGH > -1) {
+  //     return user.auths[indexOfGH];
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
   return user;
 };
