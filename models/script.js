@@ -1,5 +1,6 @@
 var async = require('async');
 var _ = require('underscore');
+var sanitizeHtml = require('sanitize-html');
 
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
@@ -8,6 +9,7 @@ var ObjectId = Schema.Types.ObjectId;
 var humanizedDate = require('./mixins/humanizedDate');
 var renderMd = require('../libs/markdown').renderMd;
 var cleanFilename = require('../libs/helpers').cleanFilename;
+var htmlWhitelistLink = require('../libs/htmlWhitelistLink.json');
 
 var ScriptSchema = new Schema({
   //--- Data
