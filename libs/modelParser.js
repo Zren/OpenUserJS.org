@@ -11,6 +11,7 @@ var renderMd = require('../libs/markdown').renderMd;
 var helpers = require('../libs/helpers');
 var getRating = require('../libs/collectiveRating').getRating;
 var cleanFilename = require('../libs/helpers').cleanFilename;
+var scriptStorage = require('../controllers/scriptStorage');
 
 var parseModelFnMap = {};
 
@@ -73,7 +74,7 @@ var getScriptPageUrl = function (script) {
   var isLib = script.isLib || false;
   var scriptPath = script.installName
     .replace(isLib ? /\.js$/ : /\.user\.js$/, '');
-  return (isLib ? '/libs/' : '/scripts/') + encodeURI(scriptPath);
+  return '/' + (isLib ? 'libs' : 'scripts') + '/' + encodeURI(scriptPath);
 };
 
 var getScriptViewSourcePageUrl = function (script) {
@@ -81,16 +82,11 @@ var getScriptViewSourcePageUrl = function (script) {
 };
 
 var getScriptEditAboutPageUrl = function (script) {
-  var isLib = script.isLib || false;
-  var scriptPath = script.installName
-    .replace(isLib ? /\.js$/ : /\.user\.js$/, '');
-  var editUrl = scriptPath.split('/');
-  editUrl.shift();
-  return (isLib ? '/lib/' : '/script/') + editUrl.join('/') + '/edit';
+  return getScriptPageUrl(script) + '/edit';
 };
 
 var getScriptEditSourcePageUrl = function (script) {
-  return getScriptViewSourcePageUrl(script);
+  return getScriptViewSourcePageUrl(script) + '/edit';
 };
 
 var getScriptInstallPageUrl = function (script) {
@@ -148,6 +144,26 @@ var parseScript = function (scriptData) {
     }
   }
 
+  // Collaborators
+  script.hasCollab = script.meta.oujs && script.meta.oujs.author && script.meta.oujs.collaborator;
+  script.collaborators = [];
+  if (script.hasCollab) {
+    var collaboratorUserNames = [];
+    if (typeof script.meta.oujs.collaborator === 'string') {
+      collaboratorUserNames.push(script.meta.oujs.collaborator);
+    } else {
+      script.meta.oujs.collaborator.forEach(function (collaboratorUserName) {
+        collaboratorUserNames.unshift(collaboratorUserName);
+      });
+    }
+    collaboratorUserNames.forEach(function(collaboratorUserName){
+      var user = parseUser({
+        name: collaboratorUserName
+      });
+      script.collaborators.push(user);
+    });
+  }
+
   //
   script.fullName = script.author.name + '/' + script.name; // GitHub-like name
 
@@ -191,6 +207,17 @@ var parseScript = function (scriptData) {
   // Dates
   parseDateProperty(script, 'updated');
 
+  // Functions
+  script.getSource = function (callback) {
+    scriptStorage.script_getSource(script, callback);
+  };
+  script.setSource = function (source, callback) {
+    scriptStorage.script_setSource(script, source, callback);
+  };
+  script.deleteSource = function (callback) {
+    scriptStorage.script_deleteSource(script, callback);
+  };
+
   return script;
 };
 parseModelFnMap.Script = parseScript;
@@ -212,9 +239,9 @@ var parseUser = function (userData) {
   var user = userData;
 
   // Role
-  user.isMod = user.role < 4;
-  user.isAdmin = user.role < 3;
-  user.roleName = userRoles[user.role];
+  user.isMod = _.isNumber(user.role) && user.role < 4;
+  user.isAdmin = _.isNumber(user.role) && user.role < 3;
+  user.roleName = _.isNumber(user.role) ? userRoles[user.role] : '';
 
   //
   user.slug = user.name;

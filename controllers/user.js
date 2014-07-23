@@ -709,8 +709,8 @@ exports.newScriptPage = function (req, res, next) {
 
   //
   options.newUserJS = true;
-  options.newScriptEditorPageUrl = '/user/add/scripts/new';
-  options.uploadNewScriptPageUrl = '/user/add/scripts/upload';
+  options.newScriptEditorPageUrl = '/user/scripts/write';
+  options.uploadNewScriptPageUrl = '/user/scripts/upload';
 
   // Page metadata
   pageMetadata(options, 'New Script');
@@ -739,8 +739,8 @@ exports.newLibraryPage = function (req, res, next) {
 
   //
   options.newJSLibrary = true;
-  options.newScriptEditorPageUrl = '/user/add/lib/new';
-  options.uploadNewScriptPageUrl = '/user/add/lib/upload';
+  options.newScriptEditorPageUrl = '/user/libs/write';
+  options.uploadNewScriptPageUrl = '/user/libs/upload';
 
   // Page metadata
   pageMetadata(options, 'New Library');
@@ -1391,7 +1391,7 @@ function getExistingScript(req, options, authedUser, callback) {
   }
 }
 
-exports.editScript = function (req, res, next) {
+exports.userWriteScriptPage = function (req, res, next) {
   var authedUser = req.session.user;
 
   //
@@ -1400,28 +1400,14 @@ exports.editScript = function (req, res, next) {
 
   // Session
   authedUser = options.authedUser = modelParser.parseUser(authedUser);
-  options.isMod = authedUser && authedUser.role < 4;
+  options.isMod = authedUser && authedUser.isMod;
+  options.isAdmin = authedUser && authedUser.isAdmin;
 
-  // Page metadata
-  pageMetadata(options);
-
-  //--- Tasks
-
-  // Get the info and source for an existing script for the editor
-  // Also works for writing a new script
-  tasks.push(function (callback) {
-    getExistingScript(req, options, authedUser, function (opts) {
-      options = opts;
-      callback(!opts);
-    });
-  });
+  //
+  options.isLib = req.route.params.isLib;
 
   //---
-  async.parallel(tasks, function (err) {
-    if (err) return next();
-
-    res.render('pages/scriptViewSourcePage', options);
-  });
+  res.render('pages/userWriteScriptPage', options);
 };
 
 // route to flag a user

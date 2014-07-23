@@ -4,7 +4,7 @@
   <title>{{title}}</title>
   {{> includes/head.html }}
   <link rel="stylesheet" type="text/css" media="all" href="/css/scriptPage.css">
-    <style type="text/css">
+  <style type="text/css">
     #editor {
       position: relative;
       min-height: 200px;
@@ -16,12 +16,16 @@
   {{> includes/header.html }}
   <div class="container-fluid">
     <div class="row">
-      <div class="container-fluid col-sm-8">
-        {{> includes/scriptPageHeader.html }}
+      <div class="container-fluid col-sm-12">
         <pre id="editor">{{source}}</pre>
-      </div>
-      <div class="container-fluid col-sm-4">
-        {{> includes/scriptAuthorToolsPanel.html }}
+        <form action="{{#isLib}}/user/libs/new{{/isLib}}{{^isLib}}/user/scripts/new{{/isLib}}" id="code_form" method="post">
+          <input type="hidden" name="script_id" value="{{script._id}}" />
+          <input type="hidden" id="source" name="source" value="" />
+          {{#isLib}}
+            <input type="hidden" name="script_name" value="{{scriptName}}" />
+          {{/isLib}}
+          <input class="btn btn-success pull-right" type="button" id="submit_code" value="Submit Code" />
+        </form>
       </div>
     </div>
   </div>
@@ -33,7 +37,12 @@
       var editor = ace.edit("editor");
       editor.setTheme("ace/theme/dawn");
       editor.getSession().setMode("ace/mode/javascript");
-      editor.setReadOnly(true);
+
+      <!-- TODO: Submit using AJAX -->
+      $('#submit_code').click(function () {
+        $('#source').val(editor.getValue());
+        $('#code_form').submit();
+      });
     });
   </script>
 </body>

@@ -37,7 +37,7 @@
     <input type="file" name="script" />
     <input type="submit" value="Upload" />
   </form>
-  <h2>{{#isLib}}<a href="/user/add/lib/new">Write a New Library Script</a>{{/isLib}}{{^isLib}}<a href="/user/add/scripts/new">Write a New Script</a>{{/isLib}}</h2>
+  <h2>{{#isLib}}<a href="/user/libs/write">Write a New Library Script</a>{{/isLib}}{{^isLib}}<a href="/user/scripts/write">Write a New Script</a>{{/isLib}}</h2>
   {{/showRepos}}
   {{#showRepos}}
   <form id="load_scripts_from_github" method="post" action="/user/add/scripts">

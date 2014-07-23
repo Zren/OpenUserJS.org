@@ -137,19 +137,6 @@ var getScriptPageTasks = function (options) {
     options.script.licenses = [{ name: 'MIT License (Expat)' }];
   }
 
-  // Show collaborators of the script
-  if (script.meta.oujs && script.meta.oujs.author && script.meta.oujs.collaborator) {
-    options.hasCollab = true;
-    if (typeof script.meta.oujs.collaborator === 'string') {
-      options.script.collaborators = [{ url: encodeURIComponent(script.meta.oujs.collaborator), text: script.meta.oujs.collaborator }];
-    } else {
-      options.script.collaborators = [];
-      script.meta.oujs.collaborator.forEach(function (collaborator) {
-        options.script.collaborators.unshift({ url: encodeURIComponent(collaborator), text: collaborator });
-      });
-    }
-  }
-
   // Show which libraries hosted on the site a script uses
   if (!script.isLib && script.uses && script.uses.length > 0) {
     script.usesLibs = true;
@@ -351,14 +338,10 @@ exports.view = function (req, res, next) {
   });
 };
 
-// route to edit a script
-exports.edit = function (req, res, next) {
+exports.scriptEditMetadataPage = function (req, res, next) {
   var authedUser = req.session.user;
 
   if (!authedUser) { return res.redirect('/login'); }
-
-  // Support routes lacking the :username. TODO: Remove this functionality.
-  req.route.params.username = authedUser.name.toLowerCase();
 
   var installNameSlug = scriptStorage.getInstallName(req);
   var scriptAuthor = req.route.params.username;
@@ -452,6 +435,69 @@ exports.edit = function (req, res, next) {
       //   });
       // });
     }
+  });
+};
+
+exports.scriptViewSourcePage = function (req, res, next) {
+  var authedUser = req.session.user;
+
+  // if (!authedUser) { return res.redirect('/login'); }
+
+  var installNameSlug = scriptStorage.getInstallName(req);
+  var scriptAuthor = req.route.params.username;
+  var scriptNameSlug = req.route.params.scriptname;
+  var isLib = req.route.params.isLib;
+
+  Script.findOne({
+    installName: scriptStorage
+      .caseInsensitive(installNameSlug + (isLib ? '.js' : '.user.js'))
+  }, function (err, scriptData) {
+    if (err || !scriptData) { return next(); }
+
+     //
+    var options = {};
+    var tasks = [];
+
+    // Session
+    authedUser = options.authedUser = modelParser.parseUser(authedUser);
+    options.isMod = authedUser && authedUser.isMod;
+    options.isAdmin = authedUser && authedUser.isAdmin;
+
+    // Page metadata
+    var script = options.script = modelParser.parseScript(scriptData);
+    options.isOwner = authedUser && authedUser._id == script._authorId;
+    options.isCollaborator = authedUser && _.contains(script.collaborators, authedUser.name);
+
+    pageMetadata(options, 'Edit ' + script.name);
+
+    // If authed user is not the script author or collaborator.
+    // if (!(options.isOwner || options.isCollaborator)) { return next(); }
+
+    //
+    options.original = script.installName;
+    options.url = req.url;
+
+    // SideBar
+    setupScriptSidePanel(options);
+
+    //--- Tasks
+    tasks = tasks.concat(getScriptPageTasks(options));
+
+    tasks.push(function (callback) {
+      script.getSource(function (err, source) {
+        if (err) return callback(err);
+        options.source = source;
+        callback();
+      });
+    });
+
+    //---
+    async.parallel(tasks, function (err) {
+      if (err) return next();
+
+      //---
+      res.render('pages/scriptViewSourcePage', options);
+    });
   });
 };
 

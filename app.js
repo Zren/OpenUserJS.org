@@ -123,6 +123,19 @@ function app_route(path) {
   return r;
 }
 
+//
+app.param('scriptType', function(req, res, next, val) {
+  var scriptTypeRegex = /(scripts|libs)/;
+  var match;
+  if (match = scriptTypeRegex.exec(String(val))) {
+    req.params.type = val;
+    req.route.params.isLib = (val == 'libs');
+    next();
+  } else {
+    next('route');
+  }
+});
+
 // Authentication routes
 app_route('/auth/').post(authentication.auth);
 app_route('/auth/:strategy').get(authentication.auth);
@@ -146,20 +159,19 @@ app_route('/user/preferences').get(user.userEditPreferencesPage);
 app_route('/user').get(function(req, res) { res.redirect('/users'); });
 
 // Adding script/library routes
-app_route('/user/add/scripts').get(user.newScriptPage);
-app_route('/user/add/scripts/new').get(user.editScript).post(user.submitSource);
-app_route('/user/add/scripts/upload').post(user.uploadScript);
-app_route('/user/add/lib').get(user.newLibraryPage);
-app_route('/user/add/lib/new').get(script.lib(user.editScript)).post(script.lib(user.submitSource));
-app_route('/user/add/lib/upload').post(script.lib(user.uploadScript));
-app_route('/user/add').get(function(req, res) { res.redirect('/user/add/scripts'); });
+app_route('/user/scripts/new').get(user.newScriptPage);
+app_route('/user/libs/new').get(user.newLibraryPage);
+app_route('/user/:scriptType/new').post(user.submitSource);
+app_route('/user/:scriptType/write').get(user.userWriteScriptPage)
+app_route('/user/:scriptType/upload').post(user.uploadScript);
+
 
 // Script routes
-app_route('/scripts/:username/:namespace?/:scriptname').get(script.view);
-app_route('/script/:username/:namespace?/:scriptname/edit').get(script.edit).post(script.edit);
-app_route('/script/:namespace?/:scriptname/edit').get(script.edit).post(script.edit);
-app_route('/scripts/:username/:namespace?/:scriptname/source').get(user.editScript); // Legacy TODO Remove
-app_route('/scripts/:username').get(function(req, res) {
+app_route('/:scriptType/:username/:scriptname').get(script.view);
+app_route('/:scriptType/:username/:scriptname/edit').get(script.scriptEditMetadataPage).post(script.scriptEditMetadataPage);
+app_route('/:scriptType/:username/:scriptname/source').get(script.scriptViewSourcePage);
+app_route('/:scriptType/:username/:scriptname/source/edit').get(script.scriptViewSourcePage);
+app_route('/:scriptType/:username').get(function(req, res) {
   res.redirect('/users/' + req.route.params.username + '/scripts');
 });
 
@@ -167,28 +179,20 @@ app_route('/scripts/:username').get(function(req, res) {
 app.get('/install/:username/:namespace?/:scriptname', scriptStorage.sendScript);
 app.get('/meta/:username/:namespace?/:scriptname', scriptStorage.sendMeta);
 app.get('/vote/scripts/:username/:namespace?/:scriptname/:vote', script.vote);
+app_route('/:scriptType/:username/:namespace/:scriptname').get(function(req, res) {
+  res.redirect('/' + req.route.params.scriptType + '/' + req.route.params.username + '/' + req.route.params.scriptname);
+});
 
 // Github hook routes
 app_route('/github/hook').post(scriptStorage.webhook);
 app_route('/github/service').post(function(req, res, next) { next(); });
 app_route('/github').get(function(req, res) { res.redirect('/'); });
 
-// Library routes
-app.get(listRegex('\/toolbox', 'lib'), main.toolbox);
-app.get(listRegex('\/search\/([^\/]+?)', 'lib'), main.toolSearch);
-app.get('/libs/:username/:scriptname', script.lib(script.view));
-app.get('/lib/:scriptname/edit', script.lib(script.edit));
-app.post('/lib/:scriptname/edit', script.lib(script.edit));
-app.get('/libs/:username/:scriptname/source', script.lib(user.editScript));
-app.get('/libs/src/:username/:scriptname', scriptStorage.sendScript);
-app.get('/vote/libs/:username/:scriptname/:vote', script.lib(script.vote));
-//app.get(listRegex('\/use\/lib\/([^\/]+?)\/([^\/]+?)', 'script'), script.useLib);
-
 // Issues routes
-app_route('/:type(scripts|libs)/:username/:namespace?/:scriptname/issues/:open(closed)?').get(issue.list);
-app_route('/:type(scripts|libs)/:username/:namespace?/:scriptname/issue/new').get(issue.open).post(issue.open);
-app_route('/:type(scripts|libs)/:username/:namespace?/:scriptname/issues/:topic').get(issue.view).post(issue.comment);
-app_route('/:type(scripts|libs)/:username/:namespace?/:scriptname/issues/:topic/:action(close|reopen)').get(issue.changeStatus);
+app_route('/:scriptType/:username/:scriptname/issues/:open(closed)?').get(issue.list);
+app_route('/:scriptType/:username/:scriptname/issue/new').get(issue.open).post(issue.open);
+app_route('/:scriptType/:username/:scriptname/issues/:topic').get(issue.view).post(issue.comment);
+app_route('/:scriptType/:username/:scriptname/issues/:topic/:action(close|reopen)').get(issue.changeStatus);
 
 // Admin routes
 app.get('/admin', admin.adminPage);
