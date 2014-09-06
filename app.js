@@ -57,7 +57,7 @@ if (app.get('port') === 443) {
 }
 
 if (process.env.NODE_ENV !== 'production') {
-  app.use(express.logger('dev'));
+  app.use(require('morgan')('dev'));
 }
 
 app.use(express.urlencoded());
