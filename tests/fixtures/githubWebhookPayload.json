@@ -1,0 +1,144 @@
+{
+  "ref": "refs/heads/master",
+  "after": "1c22931d69d51cb6062ddc4ceb22684a7dcb617b",
+  "before": "b63ed6052e0c5156b0520ddb5fc322baea607db9",
+  "created": false,
+  "deleted": false,
+  "forced": false,
+  "compare": "https://github.com/Zren/ResizeYoutubePlayerToWindowSize/compare/b63ed6052e0c...1c22931d69d5",
+  "commits": [
+    {
+      "id": "1c22931d69d51cb6062ddc4ceb22684a7dcb617b",
+      "distinct": true,
+      "message": "1.42 Fix #5 and #6.\n\n*Fix HTML5 progress bar not resizing. Thanks to [YePpHa](https://github.com/YePpHa/) for solving this bug in YoutubeCenter. [[Screenshot](https://i.imgur.com/FcLISVq.png)]\n* Fix the player getting right aligned in some cases. [[Screenshot]](https://greasyfork.org/forum/uploads/FileUpload/95/4d455197513c65d1aa243a0d800133.jpg)\n* Prevent the script from running twice on the same page.",
+      "timestamp": "2014-08-18T11:55:23-04:00",
+      "url": "https://github.com/Zren/ResizeYoutubePlayerToWindowSize/commit/1c22931d69d51cb6062ddc4ceb22684a7dcb617b",
+      "author": {
+        "name": "Chris H",
+        "email": "zrenfire@gmail.com",
+        "username": "Zren"
+      },
+      "committer": {
+        "name": "Chris H",
+        "email": "zrenfire@gmail.com",
+        "username": "Zren"
+      },
+      "added": [
+
+      ],
+      "removed": [
+
+      ],
+      "modified": [
+        "153699.user.js",
+        "changelog.md",
+        "description.md"
+      ]
+    }
+  ],
+  "head_commit": {
+    "id": "1c22931d69d51cb6062ddc4ceb22684a7dcb617b",
+    "distinct": true,
+    "message": "1.42 Fix #5 and #6.\n\n*Fix HTML5 progress bar not resizing. Thanks to [YePpHa](https://github.com/YePpHa/) for solving this bug in YoutubeCenter. [[Screenshot](https://i.imgur.com/FcLISVq.png)]\n* Fix the player getting right aligned in some cases. [[Screenshot]](https://greasyfork.org/forum/uploads/FileUpload/95/4d455197513c65d1aa243a0d800133.jpg)\n* Prevent the script from running twice on the same page.",
+    "timestamp": "2014-08-18T11:55:23-04:00",
+    "url": "https://github.com/Zren/ResizeYoutubePlayerToWindowSize/commit/1c22931d69d51cb6062ddc4ceb22684a7dcb617b",
+    "author": {
+      "name": "Chris H",
+      "email": "zrenfire@gmail.com",
+      "username": "Zren"
+    },
+    "committer": {
+      "name": "Chris H",
+      "email": "zrenfire@gmail.com",
+      "username": "Zren"
+    },
+    "added": [
+
+    ],
+    "removed": [
+
+    ],
+    "modified": [
+      "153699.user.js",
+      "changelog.md",
+      "description.md"
+    ]
+  },
+  "repository": {
+    "id": 11532258,
+    "name": "ResizeYoutubePlayerToWindowSize",
+    "full_name": "Zren/ResizeYoutubePlayerToWindowSize",
+    "owner": {
+      "name": "Zren",
+      "email": "zrenfire@gmail.com"
+    },
+    "private": false,
+    "html_url": "https://github.com/Zren/ResizeYoutubePlayerToWindowSize",
+    "description": "Userscript: Moves the video to the top of the website and resizes it to the screen size.",
+    "fork": false,
+    "url": "https://github.com/Zren/ResizeYoutubePlayerToWindowSize",
+    "forks_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/forks",
+    "keys_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/keys{/key_id}",
+    "collaborators_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/collaborators{/collaborator}",
+    "teams_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/teams",
+    "hooks_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/hooks",
+    "issue_events_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/issues/events{/number}",
+    "events_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/events",
+    "assignees_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/assignees{/user}",
+    "branches_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/branches{/branch}",
+    "tags_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/tags",
+    "blobs_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/git/blobs{/sha}",
+    "git_tags_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/git/tags{/sha}",
+    "git_refs_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/git/refs{/sha}",
+    "trees_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/git/trees{/sha}",
+    "statuses_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/statuses/{sha}",
+    "languages_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/languages",
+    "stargazers_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/stargazers",
+    "contributors_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/contributors",
+    "subscribers_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/subscribers",
+    "subscription_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/subscription",
+    "commits_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/commits{/sha}",
+    "git_commits_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/git/commits{/sha}",
+    "comments_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/comments{/number}",
+    "issue_comment_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/issues/comments/{number}",
+    "contents_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/contents/{+path}",
+    "compare_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/compare/{base}...{head}",
+    "merges_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/merges",
+    "archive_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/{archive_format}{/ref}",
+    "downloads_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/downloads",
+    "issues_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/issues{/number}",
+    "pulls_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/pulls{/number}",
+    "milestones_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/milestones{/number}",
+    "notifications_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/notifications{?since,all,participating}",
+    "labels_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/labels{/name}",
+    "releases_url": "https://api.github.com/repos/Zren/ResizeYoutubePlayerToWindowSize/releases{/id}",
+    "created_at": 1374251802,
+    "updated_at": "2014-07-13T00:08:56Z",
+    "pushed_at": 1408377400,
+    "git_url": "git://github.com/Zren/ResizeYoutubePlayerToWindowSize.git",
+    "ssh_url": "git@github.com:Zren/ResizeYoutubePlayerToWindowSize.git",
+    "clone_url": "https://github.com/Zren/ResizeYoutubePlayerToWindowSize.git",
+    "svn_url": "https://github.com/Zren/ResizeYoutubePlayerToWindowSize",
+    "homepage": null,
+    "size": 391,
+    "stargazers_count": 3,
+    "watchers_count": 3,
+    "language": "JavaScript",
+    "has_issues": true,
+    "has_downloads": true,
+    "has_wiki": true,
+    "forks_count": 0,
+    "mirror_url": null,
+    "open_issues_count": 2,
+    "forks": 0,
+    "open_issues": 2,
+    "watchers": 3,
+    "default_branch": "master",
+    "stargazers": 3,
+    "master_branch": "master"
+  },
+  "pusher": {
+    "name": "Zren",
+    "email": "zrenfire@gmail.com"
+  }
+}

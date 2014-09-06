@@ -47,14 +47,17 @@ module.exports = function(aApp) {
   app_route('/users/:username').get(user.view);
   app_route('/users/:username/comments').get(user.userCommentListPage);
   app_route('/users/:username/scripts').get(user.userScriptListPage);
-  app_route('/users/:username/github').get(user.userManageGitHubPage).post(user.userManageGitHubPage);
-  app_route('/users/:username/github/repos').get(user.userGitHubRepoListPage);
-  app_route('/users/:username/github/repo').get(user.userGitHubRepoPage);
-  app_route('/users/:username/github/import').post(user.userGitHubImportScriptPage);
-  app_route('/users/:username/profile/edit').get(user.userEditProfilePage).post(user.update);
   app_route('/users/:username/update').post(admin.adminUserUpdate);
-  app_route('/user/preferences').get(user.userEditPreferencesPage);
   app_route('/user').get(function (aReq, aRes) { aRes.redirect('/users'); });
+
+  // Account routes
+  app_route('/account/github').get(user.userManageGitHubPage).post(user.userManageGitHubPage);
+  app_route('/account/github/repos').get(user.userGitHubRepoListPage);
+  app_route('/account/github/repo').get(user.userGitHubRepoPage);
+  app_route('/account/github/import').post(require('./controllers/githubImport'));
+  app_route('/account/profile/edit').get(user.userEditProfilePage).post(user.update);
+  app_route('/account/preferences').get(user.userEditPreferencesPage);
+
 
   // Adding script/library routes
   app_route('/user/add/scripts').get(user.newScriptPage);
@@ -77,7 +80,7 @@ module.exports = function(aApp) {
   app_route('/meta/:username/:namespace?/:scriptname').get(scriptStorage.sendMeta);
 
   // Github hook routes
-  app_route('/github/hook').post(scriptStorage.webhook);
+  app_route('/github/hook').post(require('./controllers/githubHook'));
   app_route('/github/service').post(function (aReq, aRes, aNext) { aNext(); });
   app_route('/github').get(function (aReq, aRes) { aRes.redirect('/'); });
 
