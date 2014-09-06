@@ -17,9 +17,9 @@ module.exports = function (aReq, aRes, aNext) {
   options.isAdmin = authedUser && authedUser.isAdmin;
 
   // GitHub
-  var githubUserId = options.githubUserId = aReq.body.user || aReq.query.user || authedUser.ghUsername || authedUser.githubUserId();
-  var githubRepoName = options.githubRepoName = aReq.body.repo || aReq.query.repo;
-  var githubBlobPath = options.githubBlobPath = aReq.body.path || aReq.query.path;
+  var githubUserId = aReq.body.user || aReq.query.user || authedUser.ghUsername || authedUser.githubUserId();
+  var githubRepoName = aReq.body.repo || aReq.query.repo;
+  var githubBlobPath = aReq.body.path || aReq.query.path;
 
   if (!(githubUserId && githubRepoName && githubBlobPath)) {
     return statusCodePage(aReq, aRes, aNext, {
@@ -34,7 +34,7 @@ module.exports = function (aReq, aRes, aNext) {
     githubRepoName: githubRepoName,
     githubBlobPath: githubBlobPath,
     updateOnly: false
-  }, function (aErr) {
+  }, function (aErr, aResult) {
     if (aErr) {
       console.error(aErr);
       console.error(githubUserId, githubRepoName, githubBlobPath);
@@ -44,7 +44,7 @@ module.exports = function (aReq, aRes, aNext) {
       });
     }
 
-    var script = modelParser.parseScript(options.script);
+    var script = modelParser.parseScript(aResult.script);
     aRes.redirect(script.scriptPageUrl);
   });
 };
