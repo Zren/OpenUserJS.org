@@ -60,13 +60,13 @@ module.exports = function(aApp) {
 
 
   // Adding script/library routes
-  app_route('/user/add/scripts').get(user.newScriptPage);
-  app_route('/user/add/scripts/new').get(user.editScript).post(user.submitSource);
-  app_route('/user/add/scripts/upload').post(user.uploadScript);
-  app_route('/user/add/lib').get(user.newLibraryPage);
-  app_route('/user/add/lib/new').get(script.lib(user.editScript)).post(script.lib(user.submitSource));
-  app_route('/user/add/lib/upload').post(script.lib(user.uploadScript));
-  app_route('/user/add').get(function (aReq, aRes) { aRes.redirect('/user/add/scripts'); });
+  app_route('/account/add/scripts').get(user.newScriptPage);
+  app_route('/account/add/scripts/new').get(user.editScript).post(user.submitSource);
+  app_route('/account/add/scripts/upload').post(user.uploadScript);
+  app_route('/account/add/lib').get(user.newLibraryPage);
+  app_route('/account/add/lib/new').get(script.lib(user.editScript)).post(script.lib(user.submitSource));
+  app_route('/account/add/lib/upload').post(script.lib(user.uploadScript));
+  app_route('/account/add').get(function (aReq, aRes) { aRes.redirect('/account/add/scripts'); });
 
   // Script routes
   app_route('/scripts/:username/:namespace?/:scriptname').get(script.view);

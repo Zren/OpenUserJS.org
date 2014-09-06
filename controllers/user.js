@@ -697,7 +697,7 @@ exports.edit = function (aReq, aRes, aNext) {
     options.haveOtherStrategies = options.usedStrategies.length > 0;
 
     scriptsList.listScripts({ _authorId: user._id, isLib: null, flagged: null }, // TODO: Global detected... may need renaming
-      { size: -1 }, '/user/edit',
+      { size: -1 }, '/account/edit',
       function (aScriptsList) {
         aScriptsList.edit = true;
         options.scriptsList = aScriptsList;
@@ -722,8 +722,8 @@ exports.newScriptPage = function (aReq, aRes, aNext) {
 
   //
   options.newUserJS = true;
-  options.newScriptEditorPageUrl = '/user/add/scripts/new';
-  options.uploadNewScriptPageUrl = '/user/add/scripts/upload';
+  options.newScriptEditorPageUrl = '/account/add/scripts/new';
+  options.uploadNewScriptPageUrl = '/account/add/scripts/upload';
 
   // Page metadata
   pageMetadata(options, 'New Script');
@@ -752,8 +752,8 @@ exports.newLibraryPage = function (aReq, aRes, aNext) {
 
   //
   options.newJSLibrary = true;
-  options.newScriptEditorPageUrl = '/user/add/lib/new';
-  options.uploadNewScriptPageUrl = '/user/add/lib/upload';
+  options.newScriptEditorPageUrl = '/account/add/lib/new';
+  options.uploadNewScriptPageUrl = '/account/add/lib/upload';
 
   // Page metadata
   pageMetadata(options, 'New Library');
@@ -1083,7 +1083,7 @@ exports.uploadScript = function (aReq, aRes, aNext) {
     var script = aFiles.script;
     var stream = null;
     var bufs = [];
-    var failUrl = '/user/add/' + (isLib ? 'lib' : 'scripts');
+    var failUrl = '/account/add/' + (isLib ? 'lib' : 'scripts');
 
     // Reject non-js and huge files
     if (script.type !== 'application/javascript' &&

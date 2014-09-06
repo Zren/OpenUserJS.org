@@ -18,7 +18,7 @@
       <div class="col-md-12">
         <pre id="editor">{{source}}</pre>
         {{^readOnly}}
-        <form action="{{#isLib}}/user/add/lib/new{{/isLib}}{{^isLib}}/user/add/scripts/new{{/isLib}}" id="code_form" method="post">
+        <form action="{{#isLib}}/account/add/lib/new{{/isLib}}{{^isLib}}/account/add/scripts/new{{/isLib}}" id="code_form" method="post">
           <input type="hidden" id="source" name="source" value="" />
           <input type="hidden" name="url" value="{{{url}}}" />
           {{^owner}}<input type="hidden" name="original" value="{{original}}" />{{/owner}}
