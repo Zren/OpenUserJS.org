@@ -11,17 +11,15 @@ var app = express();
 var statusCodePage = require('./libs/templateHelpers').statusCodePage;
 var modifySessions = require('./libs/modifySessions');
 
-var settings = require('./models/settings.json');
+var config = require('./config');
 
-var connectStr = process.env.CONNECT_STRING || settings.connect;
-var sessionSecret = process.env.SESSION_SECRET || settings.secret;
 var db = mongoose.connection;
 var dbOptions = { server: { socketOptions: { keepAlive: 1 } } };
 
 app.set('port', process.env.PORT || 8080);
 
 // Connect to the database
-mongoose.connect(connectStr, dbOptions);
+mongoose.connect(config.mongoose.uri, dbOptions);
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
   app.listen(app.get('port'));
@@ -68,7 +66,7 @@ app.use(express.methodOverride());
 // Order is very important here (i.e mess with at your own risk)
 app.use(express.cookieParser());
 app.use(express.session({
-  secret: sessionSecret,
+  secret: config.express.sessionSecret,
   store: sessionStore
 }));
 app.use(passport.initialize());

@@ -28,7 +28,7 @@ var getDefaultPagination = require('../libs/templateHelpers').getDefaultPaginati
 var statusCodePage = require('../libs/templateHelpers').statusCodePage;
 var execQueryTask = require('../libs/tasks').execQueryTask;
 var countTask = require('../libs/tasks').countTask;
-var settings = require('../models/settings.json');
+var config = require('../config');
 var github = require('./../libs/githubClient');
 var pageMetadata = require('../libs/templateHelpers').pageMetadata;
 var orderDir = require('../libs/templateHelpers').orderDir;
@@ -1087,7 +1087,7 @@ exports.uploadScript = function (aReq, aRes, aNext) {
 
     // Reject non-js and huge files
     if (script.type !== 'application/javascript' &&
-      script.size > settings.maximum_upload_script_size) {
+      script.size > config.maximumScriptSize) {
       return aRes.redirect(failUrl);
     }
 

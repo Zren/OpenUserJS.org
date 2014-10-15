@@ -1,6 +1,9 @@
 var async = require('async');
 var _ = require('underscore');
+
 var User = require('../models/user').User;
+
+var github = require('../libs/githubClient');
 var githubImporter = require('../libs/githubImporter');
 
 // GitHub calls this on a push if a webhook is setup
@@ -40,8 +43,8 @@ module.exports = function (aReq, aRes, aNext) {
       return aRes.send(400, 'No account linked to GitHub username ' + username);
 
     // Gather the modified user scripts
-    var jsFilenames = {};
-    var mdFilenames = {};
+    var jsFilenames = {}; // HashSet
+    var mdFilenames = {}; // HashSet
     payload.commits.forEach(function (aCommit) {
       aCommit.modified.forEach(function (aFilename) {
         switch (aFilename.substr(-3)) {
@@ -60,30 +63,53 @@ module.exports = function (aReq, aRes, aNext) {
     console.log('jsFilenames', jsFilenames);
     console.log('mdFilenames', mdFilenames);
 
+    var githubRepoBlobs = null;
+
     // Update
     async.series([
-      // Update script code first.
+      // Fetch all blobs in the target repo.
+      function(aCallback) {
+        async.waterfall([
+          function(aCallback) {
+            github.gitdata.getBlobs({
+              user: encodeURIComponent(githubUserName),
+              repo: encodeURIComponent(githubRepoName)
+            }, aCallback);
+          },
+
+          function(aBlobs, aCallback) {
+            githubRepoBlobs = aBlobs;
+            aCallback();
+          },
+        ], aCallback);
+      },
+
+      // Update Javascript File Triggers
       function(aCallback) {
         async.map(jsFilenames, function(jsFilename, aCallback) {
           console.log(jsFilename);
-
-          // var repoManager = RepoManager.getManager(null, aUser, repos);
-          // repoManager.loadScripts(function () { }, true);
-          githubImporter.importJavasciptBlob({
+          githubImporter.importJavascriptBlob({
             user: aUser,
             githubUserId: githubUserName,
             githubRepoName: githubRepoName,
             githubBlobPath: jsFilename,
-            updateOnly: false
+            updateOnly: false,
+            blobs: githubRepoBlobs
           }, aCallback);
         }, aCallback);
       },
 
-      // Update markdown next
+      // Update Markdown File Triggers
       function(aCallback) {
         async.map(mdFilenames, function(mdFilename, aCallback) {
           console.log(mdFilename);
-          aCallback(null, mdFilename);
+          githubImporter.importMarkdownBlob({
+            user: aUser,
+            githubUserId: githubUserName,
+            githubRepoName: githubRepoName,
+            githubBlobPath: mdFilename,
+            blobs: githubRepoBlobs
+          }, aCallback);
         }, aCallback);
       }
     ], function(aError, aResults) {
