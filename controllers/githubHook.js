@@ -60,9 +60,6 @@ module.exports = function (aReq, aRes, aNext) {
     jsFilenames = Object.keys(jsFilenames);
     mdFilenames = Object.keys(mdFilenames);
 
-    console.log('jsFilenames', jsFilenames);
-    console.log('mdFilenames', mdFilenames);
-
     var githubRepoBlobs = null;
 
     // Update
@@ -87,7 +84,6 @@ module.exports = function (aReq, aRes, aNext) {
       // Update Javascript File Triggers
       function(aCallback) {
         async.map(jsFilenames, function(jsFilename, aCallback) {
-          console.log(jsFilename);
           githubImporter.importJavascriptBlob({
             user: aUser,
             githubUserId: githubUserName,
@@ -102,7 +98,6 @@ module.exports = function (aReq, aRes, aNext) {
       // Update Markdown File Triggers
       function(aCallback) {
         async.map(mdFilenames, function(mdFilename, aCallback) {
-          console.log(mdFilename);
           githubImporter.importMarkdownBlob({
             user: aUser,
             githubUserId: githubUserName,

@@ -58,7 +58,6 @@ var importJavascriptBlob = function (aOptions, aCallback) {
   var githubBlobPath = aOptions.githubBlobPath;
   var updateOnly = aOptions.updateOnly || false;
   var blobs = aOptions.blobs;
-  console.log('importJavascriptBlob', aOptions);
 
   if (!(user && githubUserId && githubRepoName && githubBlobPath))
     return aCallback('Missing required parameter.');
@@ -185,7 +184,6 @@ var importMarkdownBlob = function (aOptions, aCallback) {
   var githubRepoName = aOptions.githubRepoName;
   var githubBlobPath = aOptions.githubBlobPath;
   var blobs = aOptions.blobs;
-  console.log('importMarkdownBlob', aOptions);
 
   if (!(user && githubUserId && githubRepoName && githubBlobPath))
     return aCallback('Missing required parameter.');
@@ -244,6 +242,7 @@ var importMarkdownBlob = function (aOptions, aCallback) {
     },
     function(aNumberAffected, aRawResponse, aCallback) {
       data.numScriptsAffected = aNumberAffected;
+      console.log(util.format('importMarkdownBlob(%s, %s, %s) updated %s Scripts.', githubUserId, githubRepoName, githubBlobPath, aNumberAffected));
       aCallback(null, data);
     }
   ], aCallback);
