@@ -722,8 +722,8 @@ exports.newScriptPage = function (aReq, aRes, aNext) {
 
   //
   options.newUserJS = true;
-  options.newScriptEditorPageUrl = '/user/add/scripts/new';
-  options.uploadNewScriptPageUrl = '/user/add/scripts/upload';
+  options.newScriptEditorPageUrl = '/account/add/scripts/new';
+  options.uploadNewScriptPageUrl = '/account/add/scripts/upload';
   options.maximumUploadScriptSize = settings.maximum_upload_script_size;
 
   // Page metadata
@@ -751,8 +751,8 @@ exports.newLibraryPage = function (aReq, aRes, aNext) {
 
   //
   options.newJSLibrary = true;
-  options.newScriptEditorPageUrl = '/user/add/lib/new';
-  options.uploadNewScriptPageUrl = '/user/add/lib/upload';
+  options.newScriptEditorPageUrl = '/account/add/lib/new';
+  options.uploadNewScriptPageUrl = '/account/add/lib/upload';
   options.maximumUploadScriptSize = settings.maximum_upload_script_size;
 
   // Page metadata
@@ -1213,7 +1213,7 @@ exports.uploadScript = function (aReq, aRes, aNext) {
     var script = aFiles.script;
     var stream = null;
     var bufs = [];
-    var failUrl = '/user/add/' + (isLib ? 'lib' : 'scripts');
+    var failUrl = '/account/add/' + (isLib ? 'lib' : 'scripts');
 
     // Reject non-js and huge files
     if (script.type !== 'application/javascript' ||

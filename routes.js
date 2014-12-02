@@ -38,23 +38,25 @@ module.exports = function (aApp) {
   aApp.route('/users/:username').get(user.view);
   aApp.route('/users/:username/comments').get(user.userCommentListPage);
   aApp.route('/users/:username/scripts').get(user.userScriptListPage);
-  aApp.route('/users/:username/github').get(authentication.validateUser, user.userManageGitHubPage).post(authentication.validateUser, user.userManageGitHubPage);
-  aApp.route('/users/:username/github/repos').get(authentication.validateUser, user.userGitHubRepoListPage);
-  aApp.route('/users/:username/github/repo').get(authentication.validateUser, user.userGitHubRepoPage);
-  aApp.route('/users/:username/github/import').post(authentication.validateUser, user.userGitHubImportScriptPage);
-  aApp.route('/users/:username/profile/edit').get(authentication.validateUser, user.userEditProfilePage).post(authentication.validateUser, user.update);
   aApp.route('/users/:username/update').post(admin.adminUserUpdate);
-  aApp.route('/user/preferences').get(authentication.validateUser, user.userEditPreferencesPage);
   aApp.route('/user').get(function (aReq, aRes) { aRes.redirect('/users'); });
 
-  // Adding script/library routes
-  aApp.route('/user/add/scripts').get(authentication.validateUser, user.newScriptPage);
-  aApp.route('/user/add/scripts/new').get(script.new(user.editScript)).post(authentication.validateUser, script.new(user.submitSource));
-  aApp.route('/user/add/scripts/upload').post(authentication.validateUser, user.uploadScript);
-  aApp.route('/user/add/lib').get(authentication.validateUser, user.newLibraryPage);
-  aApp.route('/user/add/lib/new').get(script.new(script.lib(user.editScript))).post(authentication.validateUser, script.new(script.lib(user.submitSource)));
-  aApp.route('/user/add/lib/upload').post(authentication.validateUser, script.lib(user.uploadScript));
-  aApp.route('/user/add').get(function (aReq, aRes) { aRes.redirect('/user/add/scripts'); });
+  // Account routes
+  aApp.route('/account/github').get(authentication.validateUser, user.userManageGitHubPage).post(authentication.validateUser, user.userManageGitHubPage);
+  aApp.route('/account/github/repos').get(authentication.validateUser, user.userGitHubRepoListPage);
+  aApp.route('/account/github/repo').get(authentication.validateUser, user.userGitHubRepoPage);
+  aApp.route('/account/github/import').post(authentication.validateUser, user.userGitHubImportScriptPage);
+  aApp.route('/account/profile/edit').get(authentication.validateUser, user.userEditProfilePage).post(authentication.validateUser, user.update);
+  aApp.route('/account/preferences').get(authentication.validateUser, user.userEditPreferencesPage);
+ 
+  // Account: Add script/library routes
+  aApp.route('/account/add/scripts').get(authentication.validateUser, user.newScriptPage);
+  aApp.route('/account/add/scripts/new').get(script.new(user.editScript)).post(authentication.validateUser, script.new(user.submitSource));
+  aApp.route('/account/add/scripts/upload').post(authentication.validateUser, user.uploadScript);
+  aApp.route('/account/add/lib').get(authentication.validateUser, user.newLibraryPage);
+  aApp.route('/account/add/lib/new').get(script.new(script.lib(user.editScript))).post(authentication.validateUser, script.new(script.lib(user.submitSource)));
+  aApp.route('/account/add/lib/upload').post(authentication.validateUser, script.lib(user.uploadScript));
+  aApp.route('/account/add').get(function (aReq, aRes) { aRes.redirect('/account/add/scripts'); });
 
   // Script routes
   aApp.route('/scripts/:username/:namespace?/:scriptname').get(script.view);
