@@ -7,6 +7,12 @@
   <link rel="stylesheet" type="text/css" media="all" href="/redist/npm/select2/select2.css">
   <link rel="stylesheet" type="text/css" media="all" href="/redist/npm/select2-bootstrap-css/select2-bootstrap.css"> <!-- Bootstrap 3 theme -->
   <link rel="stylesheet" type="text/css" media="all" href="/css/scriptPage.css">
+  <style>
+    .github-path-input > .path-divider { display: inline-block; width: 4px; margin: 0 4px; }
+    .github-path-input > input:nth-of-type(1) { width: 15%; }
+    .github-path-input > input:nth-of-type(2) { width: 15%; }
+    .github-path-input > input:nth-of-type(3) { width: calc(100% - 30% - 24px); }
+  </style>
 </head>
 <body>
   {{> includes/header.html }}
@@ -17,29 +23,90 @@
           <div class="row">
             <div class="col-xs-12">
               {{> includes/scriptPageHeader.html }}
+              
               <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    <i class="fa fa-fw fa-paragraph"></i>
+                    Description
+                    <a class="label label-default pull-right" target="_blank" href="https://help.github.com/articles/github-flavored-markdown">
+                      <i class="fa fa-github"></i>
+                      Markdown
+                    </a>
+                  </div>
+                </div>
                 <div class="panel-body">
-                  <h2>Description</h2>
-                  <p><strong>Use <a target="_blank" href="https://help.github.com/articles/github-flavored-markdown">GitHub Flavored Markdown</a> for formatting.</strong></p>
                   <div class="user-content form-group">
                     <textarea name="about" data-provide="markdown" data-iconlibrary="fa" rows="20" class="col-xs-12">{{script.about}}</textarea>
                   </div>
-                  <div class="form-group">
-                    <button type="submit" class="btn btn-success"><i class="fa fa-fw fa-save"></i> Save</button>
+                </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <div class="panel-title">
+                    <i class="octicon octicon-mark-github"></i> GitHub Sync
+                  </div>
+                </div>
+                <div class="panel-body">
+                  <p><strong>Step 1:</strong> Enter repository information.</p>
+                  <div class="input-group">
+                    <span class="input-group-addon"><span class="hidden-xs">https://</span>github.com/</span>
+                    <input type="text" class="form-control" name="githubSyncUserId" value="{{script.githubSyncUserId}}" placeholder="User">
+                    <span class="input-group-addon">/</span>
+                    <input type="text" class="form-control" name="githubSyncRepoName" value="{{script.githubSyncRepoName}}" placeholder="Repo">
+                    <span class="input-group-addon">/</span>
+                  </div>
+
+                  <p><strong>Step 2:</strong> Create a webhook.</p>
+                  <!-- <a class="btn btn-block btn-primary" href="/account/add/scripts#sync" target="_blank" disabled>Create OUJS Webhook For This Script</a> -->
+                  <ol>
+                    <li>On your target GitHub repo, click Settings > Webhooks &amp; Services > Add Webhook.</li>
+                    <li>In the Payload URL input, paste<br /><code>https://openuserjs.org/github/hook</code></li>
+                    <li>Change the Content Type dropdown to<br /><code>application/x-www-form-urlencoded</code></li>
+                    <li>Click <code>Add Webhook</code>.</li>
+                  </ol>
+
+                  <p><strong>Step 3:</strong> Enter the filepath to sync. Filepaths are <u>case sensitive</u>.</p>
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <input type="checkbox" name="githubSyncSource" id="sync-about-checkbox" {{#script.githubSyncSource}}checked="checked"{{/script.githubSyncSource}} disabled>
+                      Script
+                    </span>
+                    <span class="input-group-addon">.../master/</span>
+                    <input type="text" class="form-control" name="githubSyncSourcePath" value="{{script.githubSyncSourcePath}}" placeholder="(Automatically Detected on Git Push)" disabled>
+                  </div>
+                  <div class="input-group">
+                    <span class="input-group-addon">
+                      <input type="checkbox" name="githubSyncDescription" {{#script.githubSyncDescription}}checked="checked"{{/script.githubSyncDescription}}>
+                      Description
+                    </span>
+                    <span class="input-group-addon">.../master/</span>
+                    <input type="text" class="form-control" name="githubSyncDescriptionPath" value="{{script.githubSyncDescriptionPath}}" placeholder="ReadMe.md">
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
         <div class="container-fluid col-sm-4">
           {{#script}}
+          <div class="hidden-xs sidebar-heading-padder"></div>
           <div class="panel panel-default">
             <div class="panel-heading">
-              <div class="panel-title">Script Groups</div>
+              <div class="panel-title">
+                <i class="fa fa-fw fa-folder"></i>
+                Script Groups
+              </div>
             </div>
             <div class="panel-body">
               <input type="hidden" id="groups" name="groups" style="width: 100%;" />
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <button type="submit" class="btn btn-success btn-lg btn-block"><i class="fa fa-save"></i> Save</button>
             </div>
           </div>
           {{> includes/scriptAuthorToolsPanel.html }}
@@ -54,6 +121,27 @@
   {{> includes/scripts/markdownEditor.html }}
   <!-- Group Selector -->
   <script type="text/javascript" src="/redist/npm/select2/select2.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('input[name="githubSyncDescription"]').on('change', function() {
+        var textarea = $('textarea[name="about"]');
+        var mdEditor = textarea.data('markdown');
+        if ($(this).prop('checked')) {
+          textarea.prop('disabled', true);
+          mdEditor.hidePreview();
+          mdEditor.disableButtons('all');
+
+        } else {
+          textarea.prop('disabled', false);
+          mdEditor.hidePreview();
+          mdEditor.enableButtons('all');
+        }
+      }).trigger('change');
+      $('input[name="githubSyncDescriptionPath"]').on('change', function(){
+        $('input[name="githubSyncDescription"]').prop('checked', true).trigger('change');
+      });
+    });
+  </script>
   <script type="text/javascript">
     var preload_groups = {{{groupNameListJSON}}};
     var preload_data = $.map(preload_groups, function (aGroup) {

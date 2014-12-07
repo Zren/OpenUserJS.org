@@ -14,6 +14,7 @@ var Strategy = require('../models/strategy').Strategy;
 
 var nil = require('./helpers').nil;
 var github = require('../libs/githubClient');
+var scriptParser = require('../libs/scriptParser');
 
 var clientId = null;
 var clientKey = null;
@@ -107,7 +108,7 @@ RepoManager.prototype.loadScripts = function (aCallback, aUpdate) {
       var url = '/' + encodeURI(aRepo.user) + '/' + encodeURI(aRepo.repo)
         + '/master' + aScript.path;
       fetchRaw('raw.githubusercontent.com', url, function (aBufs) {
-        scriptStorage.getMeta(aBufs, function (aMeta) {
+        scriptParser.getMeta(aBufs, function (aMeta) {
           if (aMeta) {
             scriptStorage.storeScript(that.user, aMeta, Buffer.concat(aBufs),
               aCallback, aUpdate);

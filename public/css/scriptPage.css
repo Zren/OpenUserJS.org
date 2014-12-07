@@ -18,3 +18,7 @@
   margin: 0 .25em;
   color: #666;
 }
+
+.sidebar-heading-padder {
+  height: 113px;
+}

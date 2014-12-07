@@ -45,7 +45,7 @@ module.exports = function (aApp) {
   aApp.route('/account/github').get(authentication.validateUser, user.userManageGitHubPage).post(authentication.validateUser, user.userManageGitHubPage);
   aApp.route('/account/github/repos').get(authentication.validateUser, user.userGitHubRepoListPage);
   aApp.route('/account/github/repo').get(authentication.validateUser, user.userGitHubRepoPage);
-  aApp.route('/account/github/import').post(authentication.validateUser, user.userGitHubImportScriptPage);
+  aApp.route('/account/github/import').post(authentication.validateUser, require('./controllers/githubImport'));
   aApp.route('/account/profile/edit').get(authentication.validateUser, user.userEditProfilePage).post(authentication.validateUser, user.update);
   aApp.route('/account/preferences').get(authentication.validateUser, user.userEditPreferencesPage);
  
@@ -70,7 +70,7 @@ module.exports = function (aApp) {
   aApp.route('/meta/:username/:namespace?/:scriptname').get(scriptStorage.sendMeta);
 
   // Github hook routes
-  aApp.route('/github/hook').post(scriptStorage.webhook);
+  aApp.route('/github/hook').post(require('./controllers/githubHook'));
   aApp.route('/github/service').post(function (aReq, aRes, aNext) { aNext(); });
   aApp.route('/github').get(function (aReq, aRes) { aRes.redirect('/'); });
 

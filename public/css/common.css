@@ -152,6 +152,14 @@ textarea {
   min-height: 258px;
 }
 
+div.md-editor > textarea {
+  background: #fff;
+}
+
+div.md-editor > textarea[disabled] {
+  background: #eee;
+}
+
 #reply-control .submit-panel {
   padding: 6px 4px;
 }
@@ -194,6 +202,17 @@ textarea {
 .btn-addon-default:hover,
 .btn-addon-default:focus {
   color: #333;
+}
+
+.radio input[type="radio"],
+.radio-inline input[type="radio"],
+.checkbox input[type="checkbox"],
+.checkbox-inline input[type="checkbox"] {
+  margin-left: 0;
+}
+
+.input-group {
+  margin-bottom: 10px;
 }
 
 .form-signin,
